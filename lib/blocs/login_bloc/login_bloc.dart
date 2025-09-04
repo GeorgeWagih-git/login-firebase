@@ -9,6 +9,9 @@ class LoginBloc extends Bloc<AuthEvents, LoginAuthStates> {
   TextEditingController password = TextEditingController();
   TextEditingController signupemail = TextEditingController();
   TextEditingController signuppassword = TextEditingController();
+  final loginformKey = GlobalKey<FormState>();
+  final signupformKey = GlobalKey<FormState>();
+
   LoginBloc() : super(LoginInitState()) {
     on<LoginEvent>((event, emit) async {
       emit(LoginLoading());

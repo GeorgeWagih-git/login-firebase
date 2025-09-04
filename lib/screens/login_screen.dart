@@ -104,9 +104,11 @@ class LoginScreen extends StatelessWidget {
                 child: BlocBuilder<LoginBloc, LoginAuthStates>(
                   builder: (context, event) {
                     return Form(
+                      key: BlocProvider.of<LoginBloc>(context).loginformKey,
                       child: Column(
                         children: [
                           AppTextFormField(
+                            isEmail: true,
                             textcontoller: BlocProvider.of<LoginBloc>(
                               context,
                             ).email,
@@ -126,20 +128,25 @@ class LoginScreen extends StatelessWidget {
                           AppMaterilaButton(
                             mterialbuttontext: 'Login',
                             onpressedfunction: () {
-                              String userEmail = BlocProvider.of<LoginBloc>(
+                              if (BlocProvider.of<LoginBloc>(
                                 context,
-                              ).email.text;
-                              String userPassword = BlocProvider.of<LoginBloc>(
-                                context,
-                              ).password.text;
-                              if (userEmail.isNotEmpty &&
-                                  userPassword.isNotEmpty) {
-                                BlocProvider.of<LoginBloc>(context).add(
-                                  LoginEvent(
-                                    email: userEmail,
-                                    password: userPassword,
-                                  ),
-                                );
+                              ).loginformKey.currentState!.validate()) {
+                                String userEmail = BlocProvider.of<LoginBloc>(
+                                  context,
+                                ).email.text;
+                                String userPassword =
+                                    BlocProvider.of<LoginBloc>(
+                                      context,
+                                    ).password.text;
+                                if (userEmail.isNotEmpty &&
+                                    userPassword.isNotEmpty) {
+                                  BlocProvider.of<LoginBloc>(context).add(
+                                    LoginEvent(
+                                      email: userEmail,
+                                      password: userPassword,
+                                    ),
+                                  );
+                                }
                               }
                             },
                           ),

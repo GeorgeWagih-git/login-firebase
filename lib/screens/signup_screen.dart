@@ -83,9 +83,11 @@ class SignupScreen extends StatelessWidget {
                 child: BlocBuilder<LoginBloc, LoginAuthStates>(
                   builder: (context, event) {
                     return Form(
+                      key: BlocProvider.of<LoginBloc>(context).signupformKey,
                       child: Column(
                         children: [
                           AppTextFormField(
+                            isEmail: true,
                             textcontoller: BlocProvider.of<LoginBloc>(
                               context,
                             ).signupemail,
@@ -105,20 +107,25 @@ class SignupScreen extends StatelessWidget {
                           AppMaterilaButton(
                             mterialbuttontext: 'SignUp',
                             onpressedfunction: () {
-                              String userEmail = BlocProvider.of<LoginBloc>(
+                              if (BlocProvider.of<LoginBloc>(
                                 context,
-                              ).signupemail.text;
-                              String userPassword = BlocProvider.of<LoginBloc>(
-                                context,
-                              ).signuppassword.text;
-                              if (userEmail.isNotEmpty &&
-                                  userPassword.isNotEmpty) {
-                                BlocProvider.of<LoginBloc>(context).add(
-                                  SignUpEvent(
-                                    email: userEmail,
-                                    password: userPassword,
-                                  ),
-                                );
+                              ).signupformKey.currentState!.validate()) {
+                                String userEmail = BlocProvider.of<LoginBloc>(
+                                  context,
+                                ).signupemail.text;
+                                String userPassword =
+                                    BlocProvider.of<LoginBloc>(
+                                      context,
+                                    ).signuppassword.text;
+                                if (userEmail.isNotEmpty &&
+                                    userPassword.isNotEmpty) {
+                                  BlocProvider.of<LoginBloc>(context).add(
+                                    SignUpEvent(
+                                      email: userEmail,
+                                      password: userPassword,
+                                    ),
+                                  );
+                                }
                               }
                             },
                           ),

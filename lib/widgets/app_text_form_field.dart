@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newproject/blocs/Vsibility_bloc/visibility_bloc.dart';
-import 'package:newproject/variables.dart';
 
 class AppTextFormField extends StatelessWidget {
   const AppTextFormField({
@@ -11,21 +10,39 @@ class AppTextFormField extends StatelessWidget {
     required this.fieldprefixicon,
     required this.textcontoller,
     this.ispassword = false,
+    this.isEmail = false,
   });
   final String fieldlabel;
   final IconData fieldprefixicon;
   final TextEditingController textcontoller;
   final bool ispassword;
+  final bool isEmail;
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: visiblepasswordBloc,
+    return BlocProvider(
+      create: (context) => VisibilityBloc(),
       child: BlocBuilder<VisibilityBloc, bool>(
         builder: (context, state) {
           return TextFormField(
             controller: textcontoller,
             obscureText: ispassword ? !state : false,
             style: TextStyle(fontSize: 16),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'This field is required';
+              }
+              if (ispassword) {
+                if (value.length < 6) {
+                  return 'Password too short';
+                }
+              } else if (isEmail) {
+                final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                if (!emailRegex.hasMatch(value)) {
+                  return 'Enter a valid email address';
+                }
+              }
+              return null;
+            },
             decoration: InputDecoration(
               labelText: fieldlabel,
               labelStyle: TextStyle(
@@ -51,7 +68,14 @@ class AppTextFormField extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide(color: Colors.blueAccent, width: 2),
               ),
-
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: const BorderSide(color: Colors.red, width: 1.5),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: const BorderSide(color: Colors.red, width: 1.5),
+              ),
               suffixIcon: ispassword
                   ? IconButton(
                       onPressed: () {
@@ -77,4 +101,10 @@ class AppTextFormField extends StatelessWidget {
       ),
     );
   }
+}
+
+String? defaultValidator(String? value, {bool isPassword = false}) {
+  if (value == null || value.isEmpty) return 'This field is required';
+  if (isPassword && value.length < 6) return 'Password too short';
+  return null;
 }
