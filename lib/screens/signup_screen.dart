@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:newproject/blocs/login_bloc.dart';
-import 'package:newproject/blocs/login_events.dart';
-import 'package:newproject/blocs/login_states.dart';
+import 'package:newproject/blocs/login_bloc/login_bloc.dart';
+import 'package:newproject/blocs/login_bloc/login_events.dart';
+import 'package:newproject/blocs/login_bloc/login_states.dart';
 import 'package:newproject/widgets/app_materila_button.dart';
 import 'package:newproject/widgets/app_text_form_field.dart';
 
@@ -43,7 +43,7 @@ class SignupScreen extends StatelessWidget {
               SizedBox(height: 20),
               Divider(color: Colors.indigo, thickness: 0.5),
               SizedBox(height: 20),
-              BlocListener<LoginBloc, AuthStates>(
+              BlocListener<LoginBloc, LoginAuthStates>(
                 listener: (context, state) {
                   if (state is SignUPSuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -80,7 +80,7 @@ class SignupScreen extends StatelessWidget {
                     );
                   }
                 },
-                child: BlocBuilder<LoginBloc, AuthStates>(
+                child: BlocBuilder<LoginBloc, LoginAuthStates>(
                   builder: (context, event) {
                     return Form(
                       child: Column(

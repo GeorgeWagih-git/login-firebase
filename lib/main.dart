@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:newproject/blocs/login_bloc.dart';
+import 'package:newproject/blocs/login_bloc/login_bloc.dart';
 import 'package:newproject/screens/login_screen.dart';
 
 void main() async {
