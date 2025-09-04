@@ -8,8 +8,10 @@ import 'package:newproject/screens/signup_screen.dart';
 import 'package:newproject/widgets/app_materila_button.dart';
 import 'package:newproject/widgets/app_text_form_field.dart';
 
+// ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
+  bool welcome = false;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +65,21 @@ class LoginScreen extends StatelessWidget {
                     );
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => HomeScreen()),
+                    );
+                  } else if (state is LoginSuccess && !welcome) {
+                    welcome = true;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "Welcome",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        backgroundColor: Colors.green,
+                        duration: Duration(seconds: 3),
+                      ),
                     );
                   } else if (state is LoginFail) {
                     showDialog(

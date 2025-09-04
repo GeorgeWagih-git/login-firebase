@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newproject/blocs/login_bloc.dart';
 import 'package:newproject/blocs/login_events.dart';
 import 'package:newproject/blocs/login_states.dart';
-import 'package:newproject/screens/login_screen.dart';
 import 'package:newproject/widgets/app_materila_button.dart';
 import 'package:newproject/widgets/app_text_form_field.dart';
 
@@ -60,9 +59,7 @@ class SignupScreen extends StatelessWidget {
                         duration: Duration(seconds: 3),
                       ),
                     );
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
-                    );
+                    Navigator.of(context).pop();
                   } else if (state is SignUPFail) {
                     showDialog(
                       context: context,
