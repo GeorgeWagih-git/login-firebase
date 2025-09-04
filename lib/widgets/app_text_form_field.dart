@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppTextFormField extends StatelessWidget {
   const AppTextFormField({
@@ -45,6 +46,10 @@ class AppTextFormField extends StatelessWidget {
               )
             : null,
       ),
+
+      inputFormatters: [
+        ?!ispassword ? FilteringTextInputFormatter.deny(RegExp(r'\s')) : null,
+      ],
     );
   }
 }

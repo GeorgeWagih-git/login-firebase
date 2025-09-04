@@ -12,35 +12,36 @@ class LoginBloc extends Bloc<AuthEvents, AuthStates> {
   LoginBloc() : super(LoginInitState()) {
     on<LoginEvent>((event, emit) async {
       emit(LoginLoading());
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-            email: event.email,
-            password: event.password,
-          )
-          .then((value) {
-            print('🖨️ login successed 👌');
-            emit(LoginSuccess());
-          })
-          .catchError((error) {
-            print('🖨️ login failed because : ${error.toString()}');
-            emit(LoginFail(error.toString()));
-          });
+      try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: event.email,
+          password: event.password,
+        );
+
+        print('🖨️ login succeeded 👌');
+        emit(LoginSuccess());
+      } on FirebaseAuthException catch (error) {
+        if (error.code == 'invalid-credential') {
+          emit(LoginFail('Incorrect email or password. Please try again.'));
+        } else {
+          emit(LoginFail(error.message!));
+        }
+      }
     });
+
     on<SignUpEvent>((event, emit) async {
-      emit(SignUPLoading());
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-            email: event.email,
-            password: event.password,
-          )
-          .then((value) {
-            emit(SignUPSuccess());
-            print('🖨️ SignUp successed 👌');
-          })
-          .catchError((error) {
-            emit(SignUPFail(error.toString()));
-            print('🖨️ SignUp failed because : ${error.toString()}');
-          });
+      try {
+        emit(SignUPLoading());
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: event.email,
+          password: event.password,
+        );
+
+        emit(SignUPSuccess());
+        print('🖨️ SignUp successed 👌');
+      } on FirebaseAuthException catch (error) {
+        emit(SignUPFail(error.message!));
+      }
     });
   }
 }

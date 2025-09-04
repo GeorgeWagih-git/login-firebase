@@ -6,9 +6,10 @@ build/
 pubspec.lock
 
 # Android
-**/android/**/gradle-wrapper.jar
-**/android/**/gradlew
-**/android/**/gradlew.bat
+android/.gradle/
+android/local.properties
+android/app/google-services.json
+*.keystore
 
 # iOS
 ios/Flutter/Flutter.framework
@@ -16,6 +17,7 @@ ios/Flutter/Flutter.podspec
 ios/.symlinks/
 ios/Pods/
 ios/Podfile.lock
+ios/Runner/GoogleService-Info.plist
 
 # IDEs
 .idea/
