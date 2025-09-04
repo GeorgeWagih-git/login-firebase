@@ -1,0 +1,27 @@
+# Flutter/Dart/Pub related
+.dart_tool/
+.packages
+.pub/
+build/
+pubspec.lock
+
+# Android
+**/android/**/gradle-wrapper.jar
+**/android/**/gradlew
+**/android/**/gradlew.bat
+
+# iOS
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/.symlinks/
+ios/Pods/
+ios/Podfile.lock
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# Others
+*.apk
+*.ipa
