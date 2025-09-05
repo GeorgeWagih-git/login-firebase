@@ -1,14 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newproject/blocs/login_bloc/login_events.dart';
 import 'package:newproject/blocs/login_bloc/login_states.dart';
+import 'package:newproject/models/user_moadel.dart';
 
 class LoginBloc extends Bloc<AuthEvents, LoginAuthStates> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController signupemail = TextEditingController();
+  TextEditingController signupname = TextEditingController();
   TextEditingController signuppassword = TextEditingController();
+  TextEditingController signupphoneNumber = TextEditingController();
   final loginformKey = GlobalKey<FormState>();
   final signupformKey = GlobalKey<FormState>();
 
@@ -21,10 +25,18 @@ class LoginBloc extends Bloc<AuthEvents, LoginAuthStates> {
               email: event.email,
               password: event.password,
             );
-        print(
-          '📩 Email :  ${userCredential.user?.email}\n User Id : ${userCredential.user?.uid}',
-        );
-        emit(LoginSuccess());
+        final uid = userCredential.user?.uid;
+        print('📩 Email :  ${userCredential.user?.email}\n User Id : $uid');
+        final snapshot = await FirebaseFirestore.instance
+            .collection('Users_id')
+            .doc(uid)
+            .get();
+        if (snapshot.exists) {
+          final data = snapshot.data();
+
+          UserModel usermodel = UserModel.fromMap(data!);
+          emit(LoginSuccess(usermodel: usermodel));
+        }
       } on FirebaseAuthException catch (error) {
         if (error.code == 'invalid-credential') {
           emit(LoginFail('Incorrect email or password. Please try again.'));
@@ -37,11 +49,22 @@ class LoginBloc extends Bloc<AuthEvents, LoginAuthStates> {
     on<SignUpEvent>((event, emit) async {
       try {
         emit(SignUPLoading());
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: event.email,
-          password: event.password,
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+              email: event.email,
+              password: event.password,
+            );
+        UserModel userModel = UserModel(
+          email: userCredential.user?.email,
+          name: event.name ?? "no name",
+          phone: event.phone ?? "no number",
         );
+        print('🖨️ Map : ${userModel.toMap()}');
         emit(SignUPSuccess());
+        await FirebaseFirestore.instance
+            .collection('Users_id')
+            .doc(userCredential.user?.uid)
+            .set(userModel.toMap());
       } on FirebaseAuthException catch (error) {
         emit(SignUPFail(error.message!));
       }

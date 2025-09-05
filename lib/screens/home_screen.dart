@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:newproject/models/user_moadel.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.usermodel});
+  final UserModel usermodel;
 
   @override
   Widget build(BuildContext context) {
@@ -11,6 +13,31 @@ class HomeScreen extends StatelessWidget {
         title: Text('Home', style: TextStyle(color: Colors.white)),
         centerTitle: true,
         backgroundColor: Colors.purple,
+      ),
+      body: Column(
+        children: [
+          Center(
+            child: Text(
+              usermodel.name!,
+              style: TextStyle(fontSize: 30, color: Colors.indigo),
+            ),
+          ),
+          SizedBox(height: 40),
+          Center(
+            child: Text(
+              usermodel.email!,
+              style: TextStyle(fontSize: 30, color: Colors.indigo),
+            ),
+          ),
+          SizedBox(height: 40),
+          Center(
+            child: Text(
+              usermodel.phone!,
+              style: TextStyle(fontSize: 30, color: Colors.indigo),
+            ),
+          ),
+          SizedBox(height: 40),
+        ],
       ),
     );
   }

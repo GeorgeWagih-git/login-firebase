@@ -11,12 +11,14 @@ class AppTextFormField extends StatelessWidget {
     required this.textcontoller,
     this.ispassword = false,
     this.isEmail = false,
+    this.isphoneNumber = false,
   });
   final String fieldlabel;
   final IconData fieldprefixicon;
   final TextEditingController textcontoller;
   final bool ispassword;
   final bool isEmail;
+  final bool isphoneNumber;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -24,6 +26,9 @@ class AppTextFormField extends StatelessWidget {
       child: BlocBuilder<VisibilityBloc, bool>(
         builder: (context, state) {
           return TextFormField(
+            keyboardType: isphoneNumber
+                ? TextInputType.number
+                : TextInputType.text,
             controller: textcontoller,
             obscureText: ispassword ? !state : false,
             style: TextStyle(fontSize: 16),
@@ -93,9 +98,11 @@ class AppTextFormField extends StatelessWidget {
                   : null,
             ),
 
-            inputFormatters: ispassword
-                ? []
-                : [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
+            inputFormatters: isEmail
+                ? [FilteringTextInputFormatter.deny(RegExp(r'\s'))]
+                : isphoneNumber
+                ? [FilteringTextInputFormatter.digitsOnly]
+                : [],
           );
         },
       ),

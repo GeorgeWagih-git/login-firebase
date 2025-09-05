@@ -104,6 +104,23 @@ class SignupScreen extends StatelessWidget {
                             ispassword: true,
                           ),
                           SizedBox(height: 20),
+                          AppTextFormField(
+                            fieldlabel: 'Phone Number',
+                            fieldprefixicon: Icons.phone,
+                            textcontoller: BlocProvider.of<LoginBloc>(
+                              context,
+                            ).signupphoneNumber,
+                            isphoneNumber: true,
+                          ),
+                          SizedBox(height: 20),
+                          AppTextFormField(
+                            fieldlabel: 'Name',
+                            fieldprefixicon: Icons.person,
+                            textcontoller: BlocProvider.of<LoginBloc>(
+                              context,
+                            ).signupname,
+                          ),
+                          SizedBox(height: 20),
                           AppMaterilaButton(
                             mterialbuttontext: 'SignUp',
                             onpressedfunction: () {
@@ -117,12 +134,20 @@ class SignupScreen extends StatelessWidget {
                                     BlocProvider.of<LoginBloc>(
                                       context,
                                     ).signuppassword.text;
+                                String userName = BlocProvider.of<LoginBloc>(
+                                  context,
+                                ).signupname.text;
+                                String userPhone = BlocProvider.of<LoginBloc>(
+                                  context,
+                                ).signupphoneNumber.text;
                                 if (userEmail.isNotEmpty &&
                                     userPassword.isNotEmpty) {
                                   BlocProvider.of<LoginBloc>(context).add(
                                     SignUpEvent(
                                       email: userEmail,
                                       password: userPassword,
+                                      name: userName,
+                                      phone: userPhone,
                                     ),
                                   );
                                 }
