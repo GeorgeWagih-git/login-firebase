@@ -116,6 +116,24 @@ class HomeScreen extends StatelessWidget {
                       style: TextStyle(color: Colors.red, fontSize: 30),
                     ),
                   ),
+            body: state is ProfileLoadingState
+                ? Center(child: CircularProgressIndicator())
+                : state is ProfileSuccessState
+                ? Column(
+                    children: [
+                      Text('Welcom Back !', style: TextStyle(fontSize: 40)),
+                      Text(
+                        state.userModel.name ?? "No Name Found...",
+                        style: TextStyle(fontSize: 40),
+                      ),
+                    ],
+                  )
+                : Center(
+                    child: Text(
+                      'Error',
+                      style: TextStyle(color: Colors.red, fontSize: 30),
+                    ),
+                  ),
           );
         },
       ),
