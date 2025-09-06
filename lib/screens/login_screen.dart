@@ -64,9 +64,7 @@ class LoginScreen extends StatelessWidget {
                       ),
                     );
                     Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => HomeScreen(userID: state.uid),
-                      ),
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
                     );
                   } else if (state is LoginSuccess && !welcome) {
                     welcome = true;
@@ -104,7 +102,7 @@ class LoginScreen extends StatelessWidget {
                   }
                 },
                 child: BlocBuilder<LoginBloc, LoginAuthStates>(
-                  builder: (context, event) {
+                  builder: (context, state) {
                     return Form(
                       key: BlocProvider.of<LoginBloc>(context).loginformKey,
                       child: Column(
@@ -127,29 +125,39 @@ class LoginScreen extends StatelessWidget {
                             ispassword: true,
                           ),
                           SizedBox(height: 20),
-                          AppMaterilaButton(
-                            mterialbuttontext: 'Login',
-                            onpressedfunction: () {
-                              if (BlocProvider.of<LoginBloc>(
-                                context,
-                              ).loginformKey.currentState!.validate()) {
-                                String userEmail = BlocProvider.of<LoginBloc>(
-                                  context,
-                                ).email.text;
-                                String userPassword =
-                                    BlocProvider.of<LoginBloc>(
-                                      context,
-                                    ).password.text;
-                                if (userEmail.isNotEmpty &&
-                                    userPassword.isNotEmpty) {
-                                  BlocProvider.of<LoginBloc>(context).add(
-                                    LoginEvent(
-                                      email: userEmail,
-                                      password: userPassword,
-                                    ),
-                                  );
-                                }
-                              }
+                          BlocBuilder<LoginBloc, LoginAuthStates>(
+                            builder: (context, state) {
+                              return state is LoginLoading
+                                  ? Center(child: CircularProgressIndicator())
+                                  : AppMaterilaButton(
+                                      mterialbuttontext: 'Login',
+                                      onpressedfunction: () {
+                                        if (BlocProvider.of<LoginBloc>(context)
+                                            .loginformKey
+                                            .currentState!
+                                            .validate()) {
+                                          String userEmail =
+                                              BlocProvider.of<LoginBloc>(
+                                                context,
+                                              ).email.text;
+                                          String userPassword =
+                                              BlocProvider.of<LoginBloc>(
+                                                context,
+                                              ).password.text;
+                                          if (userEmail.isNotEmpty &&
+                                              userPassword.isNotEmpty) {
+                                            BlocProvider.of<LoginBloc>(
+                                              context,
+                                            ).add(
+                                              LoginEvent(
+                                                email: userEmail,
+                                                password: userPassword,
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      },
+                                    );
                             },
                           ),
                           TextButton(
@@ -160,7 +168,7 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               );
                             },
-                            child: Text('Don,t have an account? SignUp'),
+                            child: Text("Don't have an account? SignUp"),
                           ),
                         ],
                       ),

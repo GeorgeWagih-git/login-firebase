@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newproject/blocs/login_bloc/login_events.dart';
 import 'package:newproject/blocs/login_bloc/login_states.dart';
 import 'package:newproject/models/user_moadel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginBloc extends Bloc<AuthEvents, LoginAuthStates> {
   TextEditingController email = TextEditingController();
@@ -26,7 +27,9 @@ class LoginBloc extends Bloc<AuthEvents, LoginAuthStates> {
               password: event.password,
             );
         final uid = userCredential.user?.uid;
-        emit(LoginSuccess(uid: uid!));
+        var shared = await SharedPreferences.getInstance();
+        shared.setString("uid", uid ?? "");
+        emit(LoginSuccess());
       } on FirebaseAuthException catch (error) {
         if (error.code == 'invalid-credential') {
           emit(LoginFail('Incorrect email or password. Please try again.'));

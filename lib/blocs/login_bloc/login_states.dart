@@ -2,10 +2,7 @@ abstract class LoginAuthStates {}
 
 class LoginInitState extends LoginAuthStates {}
 
-class LoginSuccess extends LoginAuthStates {
-  String uid;
-  LoginSuccess({required this.uid});
-}
+class LoginSuccess extends LoginAuthStates {}
 
 class LoginLoading extends LoginAuthStates {}
 
