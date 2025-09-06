@@ -121,37 +121,49 @@ class SignupScreen extends StatelessWidget {
                             ).signupname,
                           ),
                           SizedBox(height: 20),
-                          AppMaterilaButton(
-                            mterialbuttontext: 'SignUp',
-                            onpressedfunction: () {
-                              if (BlocProvider.of<LoginBloc>(
-                                context,
-                              ).signupformKey.currentState!.validate()) {
-                                String userEmail = BlocProvider.of<LoginBloc>(
-                                  context,
-                                ).signupemail.text;
-                                String userPassword =
-                                    BlocProvider.of<LoginBloc>(
-                                      context,
-                                    ).signuppassword.text;
-                                String userName = BlocProvider.of<LoginBloc>(
-                                  context,
-                                ).signupname.text;
-                                String userPhone = BlocProvider.of<LoginBloc>(
-                                  context,
-                                ).signupphoneNumber.text;
-                                if (userEmail.isNotEmpty &&
-                                    userPassword.isNotEmpty) {
-                                  BlocProvider.of<LoginBloc>(context).add(
-                                    SignUpEvent(
-                                      email: userEmail,
-                                      password: userPassword,
-                                      name: userName,
-                                      phone: userPhone,
-                                    ),
-                                  );
-                                }
-                              }
+                          BlocBuilder<LoginBloc, LoginAuthStates>(
+                            builder: (context, state) {
+                              return state is LoginLoading
+                                  ? Center(child: CircularProgressIndicator())
+                                  : AppMaterilaButton(
+                                      mterialbuttontext: 'SignUp',
+                                      onpressedfunction: () {
+                                        if (BlocProvider.of<LoginBloc>(context)
+                                            .signupformKey
+                                            .currentState!
+                                            .validate()) {
+                                          String userEmail =
+                                              BlocProvider.of<LoginBloc>(
+                                                context,
+                                              ).signupemail.text;
+                                          String userPassword =
+                                              BlocProvider.of<LoginBloc>(
+                                                context,
+                                              ).signuppassword.text;
+                                          String userName =
+                                              BlocProvider.of<LoginBloc>(
+                                                context,
+                                              ).signupname.text;
+                                          String userPhone =
+                                              BlocProvider.of<LoginBloc>(
+                                                context,
+                                              ).signupphoneNumber.text;
+                                          if (userEmail.isNotEmpty &&
+                                              userPassword.isNotEmpty) {
+                                            BlocProvider.of<LoginBloc>(
+                                              context,
+                                            ).add(
+                                              SignUpEvent(
+                                                email: userEmail,
+                                                password: userPassword,
+                                                name: userName,
+                                                phone: userPhone,
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      },
+                                    );
                             },
                           ),
                           TextButton(

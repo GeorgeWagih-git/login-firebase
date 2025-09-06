@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newproject/blocs/login_bloc/login_events.dart';
@@ -51,6 +52,7 @@ class LoginBloc extends Bloc<AuthEvents, LoginAuthStates> {
           email: userCredential.user?.email,
           name: event.name ?? "no name",
           phone: event.phone ?? "no number",
+          fcm: await FirebaseMessaging.instance.getToken(),
         );
         print('🖨️ Map : ${userModel.toMap()}');
         emit(SignUPSuccess());
@@ -60,6 +62,16 @@ class LoginBloc extends Bloc<AuthEvents, LoginAuthStates> {
             .set(userModel.toMap());
       } on FirebaseAuthException catch (error) {
         emit(SignUPFail(error.message!));
+      }
+    });
+    on<LogoutEvent>((event, emit) async {
+      emit(LogoutLoading());
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.remove('uid');
+        emit(LogoutSuccess());
+      } on FirebaseAuthException catch (error) {
+        emit(LogoutFail(error.message!));
       }
     });
   }

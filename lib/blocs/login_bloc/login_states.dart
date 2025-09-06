@@ -11,6 +11,15 @@ class LoginFail extends LoginAuthStates {
   LoginFail(this.error);
 }
 
+class LogoutSuccess extends LoginAuthStates {}
+
+class LogoutLoading extends LoginAuthStates {}
+
+class LogoutFail extends LoginAuthStates {
+  String error;
+  LogoutFail(this.error);
+}
+
 class SignUPSuccess extends LoginAuthStates {}
 
 class SignUPLoading extends LoginAuthStates {}

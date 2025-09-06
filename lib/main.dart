@@ -7,6 +7,13 @@ import 'package:newproject/screens/home_screen.dart';
 import 'package:newproject/screens/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print("📥 Messege arrived while app is closed");
+  print("Title: ${message.notification?.title}");
+  print("Body: ${message.notification?.body}");
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferences.getInstance();
@@ -14,6 +21,11 @@ void main() async {
   await FirebaseMessaging.instance.getToken().then((value) {
     print("🖨️ My FCM token is : $value");
   });
+  FirebaseMessaging.onMessage.listen(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessageOpenedApp.listen(
+    _firebaseMessagingBackgroundHandler,
+  );
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(
     MultiBlocProvider(
       providers: [BlocProvider(create: (context) => LoginBloc())],
