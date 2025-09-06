@@ -65,8 +65,7 @@ class LoginScreen extends StatelessWidget {
                     );
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) =>
-                            HomeScreen(usermodel: state.usermodel),
+                        builder: (context) => HomeScreen(userID: state.uid),
                       ),
                     );
                   } else if (state is LoginSuccess && !welcome) {

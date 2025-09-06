@@ -1,12 +1,10 @@
-import 'package:newproject/models/user_moadel.dart';
-
 abstract class LoginAuthStates {}
 
 class LoginInitState extends LoginAuthStates {}
 
 class LoginSuccess extends LoginAuthStates {
-  UserModel usermodel;
-  LoginSuccess({required this.usermodel});
+  String uid;
+  LoginSuccess({required this.uid});
 }
 
 class LoginLoading extends LoginAuthStates {}

@@ -26,17 +26,7 @@ class LoginBloc extends Bloc<AuthEvents, LoginAuthStates> {
               password: event.password,
             );
         final uid = userCredential.user?.uid;
-        print('📩 Email :  ${userCredential.user?.email}\n User Id : $uid');
-        final snapshot = await FirebaseFirestore.instance
-            .collection('Users_id')
-            .doc(uid)
-            .get();
-        if (snapshot.exists) {
-          final data = snapshot.data();
-
-          UserModel usermodel = UserModel.fromMap(data!);
-          emit(LoginSuccess(usermodel: usermodel));
-        }
+        emit(LoginSuccess(uid: uid!));
       } on FirebaseAuthException catch (error) {
         if (error.code == 'invalid-credential') {
           emit(LoginFail('Incorrect email or password. Please try again.'));
