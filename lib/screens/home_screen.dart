@@ -17,10 +17,15 @@ class HomeScreen extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
-              iconTheme: IconThemeData(color: Colors.white),
-              title: Text('Home', style: TextStyle(color: Colors.white)),
+              title: Text(
+                'Home',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               centerTitle: true,
-              backgroundColor: Colors.purple,
+              backgroundColor: Colors.transparent,
             ),
             drawer: state is ProfileLoadingState
                 ? Center(child: CircularProgressIndicator())

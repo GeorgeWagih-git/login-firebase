@@ -47,10 +47,36 @@ class AppDrawer extends StatelessWidget {
                 builder: (context, state) {
                   return InkWell(
                     onTap: () {
-                      BlocProvider.of<LoginBloc>(context).add(LogoutEvent());
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => LoginScreen()),
-                        (Route<dynamic> route) => false,
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Error'),
+                            content: Text('Are you sure you Want to logout ?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  BlocProvider.of<LoginBloc>(
+                                    context,
+                                  ).add(LogoutEvent());
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                      builder: (context) => LoginScreen(),
+                                    ),
+                                    (Route<dynamic> route) => false,
+                                  );
+                                },
+                                child: Text('Ok'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Cancel'),
+                              ),
+                            ],
+                          );
+                        },
                       );
                     },
                     child: Container(
