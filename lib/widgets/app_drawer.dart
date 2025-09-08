@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newproject/blocs/login_bloc/login_bloc.dart';
 import 'package:newproject/blocs/login_bloc/login_events.dart';
 import 'package:newproject/blocs/login_bloc/login_states.dart';
+import 'package:newproject/blocs/theme_bloc/theme_bloc.dart';
+import 'package:newproject/blocs/theme_bloc/theme_event.dart';
 import 'package:newproject/screens/login_screen.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -41,6 +43,40 @@ class AppDrawer extends StatelessWidget {
                     ],
                   ),
                 ],
+              ),
+              SizedBox(height: 15),
+              Container(
+                padding: EdgeInsets.all(10),
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Theme.of(context).listTileTheme.tileColor,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.brightness_medium_rounded),
+                        SizedBox(width: 15),
+                        Text("Dark Mode", style: TextStyle(fontSize: 15)),
+                      ],
+                    ),
+                    BlocBuilder<ThemeBloc, bool>(
+                      builder: (context, state) {
+                        return Switch(
+                          activeColor: Colors.blue,
+                          value: !state,
+                          onChanged: (value) {
+                            BlocProvider.of<ThemeBloc>(
+                              context,
+                            ).add(ChangeTheme(isLight: !value));
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: 15),
               BlocBuilder<LoginBloc, LoginAuthStates>(
@@ -84,7 +120,7 @@ class AppDrawer extends StatelessWidget {
                       height: 50,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
-                        color: Colors.grey.shade300,
+                        color: Theme.of(context).listTileTheme.tileColor,
                       ),
                       child: Row(
                         children: [

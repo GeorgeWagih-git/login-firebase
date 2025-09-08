@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newproject/blocs/profile_bloc/peofile_states.dart';
 import 'package:newproject/blocs/profile_bloc/profile_bloc.dart';
-import 'package:newproject/blocs/profile_bloc/profile_events.dart';
+import 'package:newproject/screens/test_screen.dart';
 import 'package:newproject/variables.dart';
 import 'package:newproject/widgets/app_drawer.dart';
 
@@ -12,17 +12,14 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-      value: globalprofilebloc..add(GetUserProfile()),
+      value: globalprofilebloc,
       child: BlocBuilder<ProfileBloc, ProfileStates>(
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
               title: Text(
                 'Home',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
               centerTitle: true,
               backgroundColor: Colors.transparent,
@@ -51,6 +48,19 @@ class HomeScreen extends StatelessWidget {
                         Text(
                           state.userModel.name ?? "No Name Found...",
                           style: TextStyle(fontSize: 40),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => TestScreen(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'TestScreen',
+                            style: TextStyle(fontSize: 40),
+                          ),
                         ),
                       ],
                     ),
