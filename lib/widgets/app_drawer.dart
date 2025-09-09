@@ -45,37 +45,30 @@ class AppDrawer extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.all(10),
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Theme.of(context).listTileTheme.tileColor,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.brightness_medium_rounded),
-                        SizedBox(width: 15),
-                        Text("Dark Mode", style: TextStyle(fontSize: 15)),
-                      ],
-                    ),
-                    BlocBuilder<ThemeBloc, bool>(
-                      builder: (context, state) {
-                        return Switch(
-                          activeColor: Colors.blue,
-                          value: state,
-                          onChanged: (value) {
-                            BlocProvider.of<ThemeBloc>(
-                              context,
-                            ).add(ChangeTheme(isDark: value));
-                          },
-                        );
+              ListTile(
+                leading: Icon(Icons.brightness_medium_rounded),
+                title: Text("Dark Theme"),
+                trailing: BlocBuilder<ThemeBloc, bool>(
+                  builder: (context, state) {
+                    return Switch(
+                      activeColor: Colors.blue,
+                      value: state,
+                      onChanged: (value) {
+                        BlocProvider.of<ThemeBloc>(
+                          context,
+                        ).add(ChangeTheme(isDark: value));
                       },
-                    ),
-                  ],
+                    );
+                  },
+                ),
+              ),
+              SizedBox(height: 15),
+              InkWell(
+                onTap: () {},
+
+                child: ListTile(
+                  leading: Icon(Icons.settings),
+                  title: Text("Settings"),
                 ),
               ),
               SizedBox(height: 15),
@@ -115,22 +108,11 @@ class AppDrawer extends StatelessWidget {
                         },
                       );
                     },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: Theme.of(context).listTileTheme.tileColor,
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.logout, color: Colors.red),
-                          SizedBox(width: 15),
-                          Text(
-                            "LogOut",
-                            style: TextStyle(color: Colors.red, fontSize: 15),
-                          ),
-                        ],
+                    child: ListTile(
+                      leading: Icon(Icons.logout, color: Colors.red),
+                      title: Text(
+                        "Logout",
+                        style: TextStyle(color: Colors.red),
                       ),
                     ),
                   );

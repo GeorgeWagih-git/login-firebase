@@ -8,10 +8,11 @@ ThemeData lightTheme = ThemeData(
     foregroundColor: Colors.black,
   ),
   drawerTheme: const DrawerThemeData(backgroundColor: Colors.white),
-  listTileTheme: const ListTileThemeData(
+  listTileTheme: ListTileThemeData(
     iconColor: Colors.black,
     textColor: Colors.black,
-    tileColor: Colors.white,
+    tileColor: Color(0xffF7F5EE),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
   ),
 );
 ThemeData darkTheme = ThemeData(
@@ -22,9 +23,10 @@ ThemeData darkTheme = ThemeData(
     foregroundColor: Colors.blue,
   ),
   drawerTheme: const DrawerThemeData(backgroundColor: Colors.black),
-  listTileTheme: const ListTileThemeData(
+  listTileTheme: ListTileThemeData(
     iconColor: Colors.white,
     textColor: Colors.white,
     tileColor: Color(0xFF1E1E1E),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
   ),
 );
