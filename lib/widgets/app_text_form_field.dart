@@ -31,7 +31,7 @@ class AppTextFormField extends StatelessWidget {
                 : TextInputType.text,
             controller: textcontoller,
             obscureText: ispassword ? !state : false,
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(fontSize: 16, color: Colors.black),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'This field is required';

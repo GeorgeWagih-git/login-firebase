@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newproject/blocs/login_bloc/login_bloc.dart';
 import 'package:newproject/blocs/login_bloc/login_events.dart';
 import 'package:newproject/blocs/login_bloc/login_states.dart';
+import 'package:newproject/screens/login_screen.dart';
 import 'package:newproject/widgets/app_materila_button.dart';
 import 'package:newproject/widgets/app_text_form_field.dart';
 
@@ -58,7 +59,9 @@ class SignupScreen extends StatelessWidget {
                         duration: Duration(seconds: 3),
                       ),
                     );
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                    );
                   } else if (state is SignUPFail) {
                     showDialog(
                       context: context,
@@ -167,7 +170,11 @@ class SignupScreen extends StatelessWidget {
                           ),
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => LoginScreen(),
+                                ),
+                              );
                             },
                             child: Text('Have an account? Login'),
                           ),

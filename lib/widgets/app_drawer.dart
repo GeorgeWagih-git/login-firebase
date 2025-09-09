@@ -16,7 +16,7 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,11 +66,11 @@ class AppDrawer extends StatelessWidget {
                       builder: (context, state) {
                         return Switch(
                           activeColor: Colors.blue,
-                          value: !state,
+                          value: state,
                           onChanged: (value) {
                             BlocProvider.of<ThemeBloc>(
                               context,
-                            ).add(ChangeTheme(isLight: !value));
+                            ).add(ChangeTheme(isDark: value));
                           },
                         );
                       },
