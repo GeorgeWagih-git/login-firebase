@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -20,12 +21,24 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  var shared = await SharedPreferences.getInstance();
   await SharedPreferences.getInstance();
   await Firebase.initializeApp();
-  await FirebaseMessaging.instance.getToken().then((value) {
-    print("🖨️ My FCM token is : $value");
+  String? token = await FirebaseMessaging.instance.getToken();
+  await FirebaseFirestore.instance
+      .collection("Users_id")
+      .doc(shared.getString('uid'))
+      .update({"fcmToken": token});
+
+  print("🖨️ My FCM token is : $token");
+  await FirebaseMessaging.instance.requestPermission();
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print("📩 Message while app is OPEN");
+    print("Title: ${message.notification?.title}");
+    print("Body: ${message.notification?.body}");
   });
-  FirebaseMessaging.onMessage.listen(_firebaseMessagingBackgroundHandler);
+
   FirebaseMessaging.onMessageOpenedApp.listen(
     _firebaseMessagingBackgroundHandler,
   );
