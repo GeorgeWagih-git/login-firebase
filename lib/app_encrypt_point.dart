@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:newproject/main.dart';
+import 'package:newproject/check_uid.dart';
 import 'package:newproject/screens/home_screen.dart';
 import 'package:newproject/screens/login_screen.dart';
 

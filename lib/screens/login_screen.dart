@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newproject/blocs/login_bloc/login_bloc.dart';
 import 'package:newproject/blocs/login_bloc/login_events.dart';
 import 'package:newproject/blocs/login_bloc/login_states.dart';
+import 'package:newproject/blocs/profile_bloc/profile_bloc.dart';
+import 'package:newproject/blocs/profile_bloc/profile_events.dart';
 import 'package:newproject/screens/home_screen.dart';
 import 'package:newproject/screens/signup_screen.dart';
 import 'package:newproject/widgets/app_materila_button.dart';
@@ -12,6 +14,7 @@ import 'package:newproject/widgets/app_text_form_field.dart';
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
   bool welcome = false;
+  final loginformKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +50,7 @@ class LoginScreen extends StatelessWidget {
               Divider(color: Colors.indigo, thickness: 0.5),
               SizedBox(height: 20),
               BlocListener<LoginBloc, LoginAuthStates>(
-                listener: (context, state) {
+                listener: (context, state) async {
                   if (state is LoginSuccess) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -64,7 +67,9 @@ class LoginScreen extends StatelessWidget {
                         duration: Duration(seconds: 3),
                       ),
                     );
-                    Navigator.of(context).push(
+                    BlocProvider.of<ProfileBloc>(context).add(GetUserProfile());
+
+                    Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (context) => HomeScreen()),
                     );
                   } else if (state is LoginSuccess && !welcome) {
@@ -105,7 +110,7 @@ class LoginScreen extends StatelessWidget {
                 child: BlocBuilder<LoginBloc, LoginAuthStates>(
                   builder: (context, state) {
                     return Form(
-                      key: BlocProvider.of<LoginBloc>(context).loginformKey,
+                      key: loginformKey,
                       child: Column(
                         children: [
                           AppTextFormField(
@@ -133,9 +138,7 @@ class LoginScreen extends StatelessWidget {
                                   : AppMaterilaButton(
                                       mterialbuttontext: 'Login',
                                       onpressedfunction: () {
-                                        if (BlocProvider.of<LoginBloc>(context)
-                                            .loginformKey
-                                            .currentState!
+                                        if (loginformKey.currentState!
                                             .validate()) {
                                           String userEmail =
                                               BlocProvider.of<LoginBloc>(

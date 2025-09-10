@@ -6,9 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newproject/app_encrypt_point.dart';
 import 'package:newproject/app_themes.dart';
 import 'package:newproject/blocs/login_bloc/login_bloc.dart';
+import 'package:newproject/blocs/profile_bloc/profile_bloc.dart';
 import 'package:newproject/blocs/profile_bloc/profile_events.dart';
 import 'package:newproject/blocs/theme_bloc/theme_bloc.dart';
 import 'package:newproject/blocs/theme_bloc/theme_event.dart';
+import 'package:newproject/check_uid.dart';
 import 'package:newproject/variables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,15 +24,27 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var shared = await SharedPreferences.getInstance();
-  await SharedPreferences.getInstance();
+  if (shared.getKeys().isNotEmpty) {
+    print("shared p 🖨️📩: ${shared.getKeys()}");
+    for (var key in shared.getKeys()) {
+      print("$key : ${shared.get(key)}");
+    }
+  }
   await Firebase.initializeApp();
-  String? token = await FirebaseMessaging.instance.getToken();
-  await FirebaseFirestore.instance
-      .collection("Users_id")
-      .doc(shared.getString('uid'))
-      .update({"fcmToken": token});
 
-  print("🖨️ My FCM token is : $token");
+  var uid = await checkUID();
+  if (uid != null) {
+    String? token = await FirebaseMessaging.instance.getToken();
+    await FirebaseFirestore.instance.collection("Users_id").doc(uid).set({
+      "fcm": token,
+    }, SetOptions(merge: true));
+    await FirebaseFirestore.instance.collection("Users_id").doc(uid).update({
+      "fcmToken": FieldValue.delete(),
+    });
+
+    print("🖨️ My FCM token is : $token");
+  }
+
   await FirebaseMessaging.instance.requestPermission();
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -48,23 +62,12 @@ void main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => LoginBloc()),
+        BlocProvider(create: (context) => ProfileBloc()),
         BlocProvider(create: (context) => ThemeBloc()..add(InitTheme())),
       ],
       child: MyApp(),
     ),
   );
-}
-
-Future<String?> checkUID() async {
-  var shared = await SharedPreferences.getInstance();
-  String? uid = shared.getString('uid');
-  if (uid != null) {
-    print("🖨️ UserId : $uid");
-    return uid;
-  } else {
-    print("🖨️ no user id stored");
-    return null;
-  }
 }
 
 class MyApp extends StatelessWidget {

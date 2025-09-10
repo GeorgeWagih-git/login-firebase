@@ -15,7 +15,6 @@ class LoginBloc extends Bloc<AuthEvents, LoginAuthStates> {
   TextEditingController signupname = TextEditingController();
   TextEditingController signuppassword = TextEditingController();
   TextEditingController signupphoneNumber = TextEditingController();
-  final loginformKey = GlobalKey<FormState>();
   final signupformKey = GlobalKey<FormState>();
 
   LoginBloc() : super(LoginInitState()) {
@@ -69,6 +68,7 @@ class LoginBloc extends Bloc<AuthEvents, LoginAuthStates> {
       try {
         final prefs = await SharedPreferences.getInstance();
         await prefs.remove('uid');
+        await prefs.remove('theme');
         emit(LogoutSuccess());
       } on FirebaseAuthException catch (error) {
         emit(LogoutFail(error.message!));
